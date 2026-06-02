@@ -1,2 +1,7 @@
-/node_modules
-/packages
+# Dependencies
+node_modules/
+
+# Environment — NEVER commit real secrets
+.env
+.env.local
+.env.*.local
