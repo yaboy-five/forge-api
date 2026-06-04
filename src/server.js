@@ -1,8 +1,12 @@
 const app = require('./app');
 const express = require("express");
+const port = process.env.port || 5000;
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.use(express.json());
+
+app.listen(port, err => {
+    if (err) {
+        return console.log("ERROR", err)
+    }
+    console.log(`Listening on port: ${port}`)
 });
-
-module.exports = server;
