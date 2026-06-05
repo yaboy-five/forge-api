@@ -1,8 +1,5 @@
 # Dependencies
 node_modules/
-public/
-views\user/
-routes/
 
 # Environment — NEVER commit real secrets
 .env
