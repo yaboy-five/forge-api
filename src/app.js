@@ -1,18 +1,19 @@
 const express = require('express');
-const app = express();
 const morgan = require('morgan');
+const app = express();
 
 //logging middleware
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.use(function(req, res, next){
-    console.log('ip address is:',req.ip);
-    next();
-});
+// routes
+app.use('/menu', menuRoute);
+app.use('/status', statusRoute);
+app.use('/cart', cartRoute);
+app.use('/checkout', checkoutRoute);
+app.use('/order', orderRoute);
 
 app.get("/", (req, res) => {
-    //root route
     res.send("FoodForge API is running")
 });
 
@@ -20,8 +21,8 @@ app.get("/menu", (req, res) => {
     res.send("FoodForge Menu")
 });
 
-app.get("/orders", (req, res) => {
-    res.send("FoodForge Orders")
+app.get("/status", (req, res) => {
+    res.send("FoodForge Order Status")
 });
 
 app.post("/cart", (req, res) => {
@@ -32,7 +33,21 @@ app.post("/checkout", (req, res) => {
     res.send("FoodForge Checkout")
 });
 
-//Error Handling
+app.post("/orderManagement", (req, res) => {
+    res.send("FoodForge OrderManagement")
+});
+
+//health check
+app.get('/health', (req, res) => {
+    res.status(200).json({status: 'FoodForge API is functioning'})
+})
+
+app.use(function(req, res, next){
+    console.log('ip address is:',req.ip);
+    next();
+});
+
+//error Handling
 app.use((req, res, next) => {
     const error = new Error('Not Found');
     error.status = 404;
