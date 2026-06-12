@@ -5,6 +5,12 @@ const {
 } = require('winston');
 require('winston-mongodb');
 
+const {
+    combine, timestamp, printf, colorize, errors
+} = format;
+
+const config = require('../config');
+
 const logger = createLogger({
     transports:[
         new transports.File({
@@ -21,6 +27,8 @@ const logger = createLogger({
         })
     ]
 });
+
+
 
 
 module.exports = logger;
