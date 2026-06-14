@@ -1,5 +1,9 @@
 # Dependencies
 node_modules/
+public/
+
+# Config?
+
 
 # Environment — NEVER commit real secrets
 .env

@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from  "react";
+import axios from './axios';
+
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
@@ -17,35 +20,41 @@ app.get("/", (req, res) => {
     res.send("FoodForge API is running")
 });
 
-app.get("/menu", (req, res) => {
-    res.send("FoodForge Menu")
-});
+// Axios API Call
+const axios = () => {
+    const [recipes, setRecipes] = useState([]);
+    const [error, setError] = useState("");
+    useEffect(() => {
+        getRecipes();
+        // axios
+        //     .get("/recipes")
+        //     .then((res) => setRecipes(res.data.recipes))
+        //     .catch((error) => setError(error.message));
+    }, []);
 
-app.get("/status", (req, res) => {
-    res.send("FoodForge Order Status")
-});
+    async function getRecipes () {
+        try {
+            const response = await axios.get('./recipes')
+        console.log(response);
+        setRecipes(response.data.recipes);
+        } catch (error) {
+            setError(error.message)
+        }
+    }
 
-app.post("/cart", (req, res) => {
-    res.send("FoodForge Cart")
-});
-
-app.post("/checkout", (req, res) => {
-    res.send("FoodForge Checkout")
-});
-
-app.post("/orderManagement", (req, res) => {
-    res.send("FoodForge OrderManagement")
-});
-
-//health check
-app.get('/health', (req, res) => {
-    res.status(200).json({status: 'FoodForge API is functioning'})
-})
-
-app.use(function(req, res, next){
-    console.log('ip address is:',req.ip);
-    next();
-});
+    return (
+        <div>
+            {error !== "" && error}
+            {recipes.map((recipe, index) => {
+                return (
+                    <h3 key={index}>
+                        {recipe.name} - ${recipe.ingredients}
+                    </h3>
+                );
+            })}
+        </div>
+    );
+};
 
 //error Handling
 app.use((req, res, next) => {
