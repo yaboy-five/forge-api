@@ -14,7 +14,7 @@ const calculateTotal = () => {
 // view cart
 exports.viewCart = (req, res) => {
     res.status(200).json(cart);
-};
+}
 
 // add item to cart
 exports.addToCart = (req, res) => {
@@ -68,7 +68,7 @@ exports.updateCartItem = (req, res) => {
 };
 
 // remove item
-exports.removeFromCart = (req, res) => {
+exports.removeCartItem = (req, res) => {
     const index = cart.items.findIndex(
         i => i.id === parseInt(req.params.id)
     );

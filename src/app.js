@@ -1,75 +1,33 @@
-import React, { useEffect, useState } from  "react";
-import axios from './axios';
+//logging middleware
 
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
 const morgan = require('morgan');
+
 const app = express();
 
-//logging middleware
+app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
 // routes
-app.use('/menu', menuRoute);
-app.use('/status', statusRoute);
-app.use('/cart', cartRoute);
-app.use('/checkout', checkoutRoute);
-app.use('/order', orderRoute);
+const menuRoutes = require("./routes/menuRoute");
+const cartRoutes = require("./routes/cartRoute");
+const checkoutRoutes = require("./routes/checkoutRoute");
+const statusRoutes = require("./routes/statusRoute");
 
-app.get("/", (req, res) => {
-    res.send("FoodForge API is running")
+app.use("/menu", menuRoutes);
+app.use("/cart", cartRoutes);
+app.use("/checkout", checkoutRoutes);
+app.use("/status", statusRoutes);
+
+// health check
+app.get("/health", (req, res) => {
+    res.json({ status: "API running correctly" });
 });
 
-// Axios API Call
-const axios = () => {
-    const [recipes, setRecipes] = useState([]);
-    const [error, setError] = useState("");
-    useEffect(() => {
-        getRecipes();
-        // axios
-        //     .get("/recipes")
-        //     .then((res) => setRecipes(res.data.recipes))
-        //     .catch((error) => setError(error.message));
-    }, []);
+const PORT = 3000;
 
-    async function getRecipes () {
-        try {
-            const response = await axios.get('./recipes')
-        console.log(response);
-        setRecipes(response.data.recipes);
-        } catch (error) {
-            setError(error.message)
-        }
-    }
-
-    return (
-        <div>
-            {error !== "" && error}
-            {recipes.map((recipe, index) => {
-                return (
-                    <h3 key={index}>
-                        {recipe.name} - ${recipe.ingredients}
-                    </h3>
-                );
-            })}
-        </div>
-    );
-};
-
-//error Handling
-app.use((req, res, next) => {
-    const error = new Error('Not Found');
-    error.status = 404;
-    next(error);
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
-
-app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.json({
-        error: {
-            message: error.message
-        }
-    })
-});
-
-module.exports = app;
