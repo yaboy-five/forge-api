@@ -40,6 +40,7 @@ exports.addMenuItem = (req, res) => {
 
     const newItem = {
         id: menu.length + 1,
+        name,
         price
     };
 
@@ -61,12 +62,12 @@ exports.updateMenuItem = (req, res) => {
         });
     };
 
-    item.name = req.body.name || item.name;
-    item.price = req.body.price || item.price;
+    item.name = req.body.name ?? item.name;
+    item.price = req.body.price ?? item.price;
 
     res.status(200).json({
         message: "Menu item updated successfully",
-        data: tem
+        data: item
     });
 };
 
