@@ -3,14 +3,12 @@ const router = express.Router();
 const auth = require("../middleware/authMiddleware");
 const statusController = require('../controllers/statusController');
 
-router.get('/:id', statusController.getOrderStatus);
+router.get('/', statusController.getStatus);
 
-router.put('/preparing/:id', markPreparing);
+router.put('/update', statusController.updateStatus);
 
-router.put('ready/:id', markReady);
+router.post('/next', statusController.nextStatus);
 
-router.put('/delivered/:id', markDelivered);
-
-router.put('/cancelled/:id', markCancelled);
+router.post('/reset', statusController.resetStatus);
 
 export default router;

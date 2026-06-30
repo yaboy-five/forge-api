@@ -4,18 +4,18 @@ const auth = require("../middleware/authMiddleware");
 const checkoutController = require('../controllers/checkoutController');
 
 // review order
-router.get('/review', reviewOrder);
+router.get('/review', checkoutController.reviewOrder);
 
 // process checkout
-router.post('/process', processCheckout);
+router.post('/process', checkoutController.processCheckout);
 
 // process payment
-router.post('/payment', processPayment);
+router.post('/payment', checkoutController.processPayment);
 
 // order confirmation
-router.get('/confirmation', orderConfirmation);
+router.get('/confirmation', checkoutController.orderConfirmation);
 
 // cancel checkout
-router.post('/cancel', cancelCheckout);
+router.post('/cancel', checkoutController.cancelCheckout);
 
 export default router
