@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require("../middleware/authMiddleware");
 const orderController = require('../controllers/orderController');
 
 router.get('/', getAllOrders);
@@ -12,4 +13,4 @@ router.delete('/cancel/:id', cancelOrder);
 
 router.get('/customer/:customerId', getCustomerOrders);
 
-module.exports = router;
+export default router;

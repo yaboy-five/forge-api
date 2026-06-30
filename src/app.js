@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from  "react";
-import axios from './axios';
+import express from "express";
+import morgan from "morgan";
 
-const express = require('express');
-const morgan = require('morgan');
+import router from "./routes/authRoute.js";
+
 const app = express();
 
-//logging middleware
+// middleware
 app.use(express.json());
 app.use(morgan('dev'));
 
-// routes
+//routes
+app.use("/auth", authRoutes);
+
+import menuRoute from "./routes/menuRoute.js";
+import statusRoute from "./routes/statusRoute.js";
+import cartRoute from "./routes/cartRoute.js";
+import checkoutRoute from "./routes/checkoutRoute.js";
+import orderRoute from "./routes/orderRoute.js";
+
 app.use('/menu', menuRoute);
 app.use('/status', statusRoute);
 app.use('/cart', cartRoute);
@@ -20,49 +28,14 @@ app.get("/", (req, res) => {
     res.send("FoodForge API is running")
 });
 
-// Axios API Call
-const axios = () => {
-    const [recipes, setRecipes] = useState([]);
-    const [error, setError] = useState("");
-    useEffect(() => {
-        getRecipes();
-        // axios
-        //     .get("/recipes")
-        //     .then((res) => setRecipes(res.data.recipes))
-        //     .catch((error) => setError(error.message));
-    }, []);
-
-    async function getRecipes () {
-        try {
-            const response = await axios.get('./recipes')
-        console.log(response);
-        setRecipes(response.data.recipes);
-        } catch (error) {
-            setError(error.message)
-        }
-    }
-
-    return (
-        <div>
-            {error !== "" && error}
-            {recipes.map((recipe, index) => {
-                return (
-                    <h3 key={index}>
-                        {recipe.name} - ${recipe.ingredients}
-                    </h3>
-                );
-            })}
-        </div>
-    );
-};
-
-//error Handling
+//error 404 Handling
 app.use((req, res, next) => {
     const error = new Error('Not Found');
     error.status = 404;
     next(error);
 });
 
+//error Handling
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
     res.json({
@@ -72,4 +45,4 @@ app.use((error, req, res, next) => {
     })
 });
 
-module.exports = app;
+export default app;

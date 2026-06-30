@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require("../middleware/authMiddleware");
 const checkoutController = require('../controllers/checkoutController');
 
 // review order
@@ -17,4 +18,4 @@ router.get('/confirmation', orderConfirmation);
 // cancel checkout
 router.post('/cancel', cancelCheckout);
 
-module.exports = router;
+export default router
