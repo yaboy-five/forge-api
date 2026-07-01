@@ -44,6 +44,4 @@ router.param("userid", (req, res, next, userid) => {
     next()
 })
 
-
-
-module.exports = router
+export default router;

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require("../middleware/authMiddleware");
 const statusController = require('../controllers/statusController');
 
 router.get('/', statusController.getStatus);
@@ -10,4 +11,4 @@ router.post('/next', statusController.nextStatus);
 
 router.post('/reset', statusController.resetStatus);
 
-module.exports = router;
+export default router;

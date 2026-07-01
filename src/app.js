@@ -1,33 +1,48 @@
-//logging middleware
+import express from "express";
+import morgan from "morgan";
 
-const express = require("express");
-const cors = require("cors");
-const morgan = require('morgan');
+import router from "./routes/authRoute.js";
 
 const app = express();
 
-app.use(cors());
+// middleware
 app.use(express.json());
 app.use(morgan('dev'));
 
-// routes
-const menuRoutes = require("./routes/menuRoute");
-const cartRoutes = require("./routes/cartRoute");
-const checkoutRoutes = require("./routes/checkoutRoute");
-const statusRoutes = require("./routes/statusRoute");
+//routes
+app.use("/auth", authRoutes);
 
-app.use("/menu", menuRoutes);
-app.use("/cart", cartRoutes);
-app.use("/checkout", checkoutRoutes);
-app.use("/status", statusRoutes);
+import menuRoute from "./routes/menuRoute.js";
+import statusRoute from "./routes/statusRoute.js";
+import cartRoute from "./routes/cartRoute.js";
+import checkoutRoute from "./routes/checkoutRoute.js";
+import orderRoute from "./routes/orderRoute.js";
 
-// health check
-app.get("/health", (req, res) => {
-    res.json({ status: "API running correctly" });
+app.use('/menu', menuRoute);
+app.use('/status', statusRoute);
+app.use('/cart', cartRoute);
+app.use('/checkout', checkoutRoute);
+app.use('/order', orderRoute);
+
+app.get("/", (req, res) => {
+    res.send("FoodForge API is running")
 });
 
-const PORT = 3000;
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+//error 404 Handling
+app.use((req, res, next) => {
+    const error = new Error('Not Found');
+    error.status = 404;
+    next(error);
 });
+
+//error Handling
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        error: {
+            message: error.message
+        }
+    })
+});
+
+export default app;
